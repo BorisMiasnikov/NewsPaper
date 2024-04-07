@@ -1,0 +1,134 @@
+from news.models import *
+
+Создаем пользователей:
+u1 = User.objects.create_user(username = 'Sasha')
+u2 = User.objects.create_user(username = 'Marina')
+u3 = User.objects.create_user(username = 'Anton')
+u4 = User.objects.create_user(username = 'Molchun')
+Для повторного назначения
+u1 = User.objects.get(pk = 1)
+u2 = User.objects.get(pk = 2)
+u3 = User.objects.get(pk = 3)
+
+Создаем авторов:
+a1 = Author.objects.create(user = u1)
+a2 = Author.objects.create(user = u2)
+a3 = Author.objects.create(user = u3)
+a4 = Author.objects.create(user = u4)
+Для повторного назначения
+a1 = Author.objects.get(pk = 1)
+a2 = Author.objects.get(pk = 2)
+a3 = Author.objects.get(pk = 3)
+
+a1.rating
+a1.update_rating()
+
+Создаем категории:
+sport = Category.objects.create(category = "Sport")
+russia = Category.objects.create(category = "Russia")
+winter = Category.objects.create(category = "Winter")
+game = Category.objects.create(category = "Game")
+study = Category.objects.create(category = "Study")
+Для повторного назначения:
+sport = Category.objects.get(pk=1)
+russia = Category.objects.get(pk=2)
+winter = Category.objects.get(pk=3)
+game = Category.objects.get(pk=4)
+study = Category.objects.get(pk=5)
+
+Создаем пост:
+p1 = Post.objects.create(author = a1, choice_field = "A", title = "Спорт в нашей жизни", text = "Сегодня спорт является неотъемлемой частью жизни многих людей.")
+p2 = Post.objects.create(author = a2, choice_field = "A", title = "Зимний спорт в России", text = "Один из самых популярных зимних видов спорта в России - хоккей. В стране есть много профессиональных хоккейных команд, которые выступают в различных лигах, включая КХЛ и ВХЛ. Также растет интерес к фигурному катанию, особенно среди женщин. Российские фигуристки занимают призовые места на международных соревнованиях и являются лидерами в этом виде спорта.")
+p3 = Post.objects.create(author = a3, choice_field = "N", title = "Обучающая игра для детей стала хитом в России", text = "Компания “Образовательные технологии”, разработчик обучающих игр для детей, сообщила о том, что их последняя разработка - игра “Умняшки” - стала хитом на российском рынке. Игра, предназначенная для детей в возрасте от 3 до 6 лет, помогает им развивать свои навыки и знания в различных областях, таких как математика, чтение, логика и многое другое.")
+p4 = Post.objects.create(author = a1, choice_field = "N", title = "Зимнее обновление в популярной игре получило множество положительных отзывов", text = "Разработчики популярной многопользовательской онлайн-игры сообщили о выходе зимнего обновления, которое получило множество положительных отзывов от игроков. Обновление добавляет в игру новые зимние локации, персонажей и предметы, а также разнообразные зимние активности, такие как снегоходы, лыжи и коньки.")
+Переназначаем посты
+p1 = Post.objects.get(pk=1)
+p2 = Post.objects.get(pk=2)
+p3 = Post.objects.get(pk=2)
+p4 = Post.objects.get(pk=4)
+
+Присваивание категорий:
+PostCategory.objects.create(post = p1, category = sport)
+PostCategory.objects.create(post = p2, category = sport)
+PostCategory.objects.create(post = p2, category = winter)
+PostCategory.objects.create(post = p2, category = russia)
+PostCategory.objects.create(post = p3, category = russia)
+PostCategory.objects.create(post = p3, category = game)
+PostCategory.objects.create(post = p3, category = study)
+PostCategory.objects.create(post = p4, category = winter)
+PostCategory.objects.create(post = p4, category = game)
+
+Создадим комментарии:
+
+c1 = Comment.objects.create(post = p1, user = u1, text = "Отлично")
+c2 = Comment.objects.create(post = p2, user = u1, text = "Комментарий первого юзера ко второму посту")
+c3 = Comment.objects.create(post = p3, user = u2, text = "Комментарий второго пользователя к третьему посту")
+c4 = Comment.objects.create(post = p4, user = u3, text = "Комментарий третьего пользователя к четверному посту")
+c5 = Comment.objects.create(post = p2, user = u2, text = "Комментарий второо юзера ко второму посту")
+Переназначить
+c1 = Comment.objects.get(pk=1)
+c2 = Comment.objects.get(pk=2)
+c3 = Comment.objects.get(pk=3)
+c4 = Comment.objects.get(pk=4)
+
+Лайки и дизлайки:
+c1.like()
+c1.like()
+c2.dislike()
+c2.dislike()
+c2.dislike()
+c3.like()
+c3.like()
+c4.like()
+c4.like()
+c4.like()
+c4.like()
+c4.like()
+c4.dislike()
+
+p1.like()
+p1.like()
+p4.dislike()
+p4.dislike()
+p4.dislike()
+p3.like()
+p3.like()
+p2.like()
+p2.like()
+p2.like()
+p2.like()
+p2.like()
+p2.like()
+p2.like()
+p2.like()
+p2.dislike()
+
+Обновляем рейтинг пользователей:
+a1.update_rating()
+a2.update_rating()
+a3.update_rating()
+Проверка
+a1.rating
+a2.rating
+a3.rating
+
+Вывод лучшего пользователя
+Author.objects.order_by('-rating')[0].user.username
+Author.objects.order_by('-rating')[0].rating
+
+Вывод даты добавления автора, ипя автора, рейтинг, заголовок и превью
+лучшей статьи автора
+best_post = Post.objects.order_by('-rating')[0]
+best_post.data_in
+best_post.author.user.username
+best_post.rating
+best_post.title
+best_post.preview()
+
+Вывод комментариев
+Comment.objects.filter(post = best_post).values('data_in', 'user', 'rating', 'text')
+
+
+
+
+

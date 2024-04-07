@@ -1,0 +1,8 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h2> Вы не можете этого сделать </h2>
+<h6> не достаточно прав </h6>
+
+<button> <a href="{% url 'Posts_list' %}"> Вернутся на начальную страницу </a></button>
+{% endblock %}

@@ -5,3 +5,6 @@ import time
 def hello():
     time.sleep(10)
     print("Hello")
+
+
+    Новая

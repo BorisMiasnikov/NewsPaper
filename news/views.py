@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -12,7 +12,7 @@ from .filters import PostFilter
 from .models import Post, Category
 from .forms import PostForm
 
-from .tasks import hello
+from .tasks import hello, printer
 
 
 
@@ -135,7 +135,8 @@ def subscribe(request, pk):
 
 
 class IndexView(View):
-    def get(selfself, request):
+    def get(self, request):
+        printer.apply_async([10], eta = datetime.now() + timedelta(seconds=5))
         hello.delay()
         return HttpResponse("Hello!")
 

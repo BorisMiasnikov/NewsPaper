@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -133,11 +134,11 @@ def subscribe(request, pk):
     massage = 'Это успешная подписка на'
     return render(request, 'subscriber.html', {'category':category, 'massage':massage})
 
-
+# это пример из модуля реализация apply_async
 class IndexView(View):
     def get(self, request):
-        printer.apply_async([10], eta = datetime.now() + timedelta(seconds=5))
-        hello.delay()
+        printer.apply_async([10], eta = timezone.now() + timedelta(seconds=5)) #это метод apply_async(args[, kwargs[, ...]])
+        hello.delay() #это метод   delay(*args, **kwargs). это сокращение от первого
         return HttpResponse("Hello!")
 
 

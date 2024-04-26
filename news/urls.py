@@ -16,5 +16,5 @@ urlpatterns = [
     path('articles/<int:pk>/delete/', PostDelete.as_view(), name='Articles_delete'),
     path('categories/<int:pk>/', CategoriesPostList.as_view(), name='Category_list'),
     path('categories/<int:pk>/subscribe', subscribe, name='Subscribe'),
-    path('hello',IndexView.as_view()),
+    path('hello',IndexView.as_view()), #эта страница для проверки работы IndexView
 ]

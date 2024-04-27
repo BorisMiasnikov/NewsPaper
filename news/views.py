@@ -13,9 +13,7 @@ from .filters import PostFilter
 from .models import Post, Category
 from .forms import PostForm
 
-from .tasks import hello, printer
-
-
+from .tasks import hello, printer, notification_new_post
 
 
 class PostsList(ListView):
@@ -72,6 +70,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         if post_limit >=3:
             return render(self.request, template_name='post_limit.html', context={'author': post.author})
         post.save()
+        notification_new_post.apply_async([post.pk]) #добавил отправку сообщения о создании, передал первичнй ключ
         return super().form_valid(form)
 
 
@@ -91,6 +90,7 @@ class ArticlesCreate(PermissionRequiredMixin, CreateView):
         if post_limit >=3:
             return render(self.request, template_name='post_limit.html', context={'author': post.author})
         post.save()
+        notification_new_post.apply_async([post.pk]) #добавил отправку сообщения о создании, передал первичнй ключ
         return super().form_valid(form)
 
 

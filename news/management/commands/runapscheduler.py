@@ -17,29 +17,29 @@ logger = logging.getLogger(__name__)
 
 
 # наша задача по выводу текста на экран
-def my_job():
-    today = datetime.datetime.now()
-    last_week = today - datetime.timedelta(days=7)
-    posts = Post.objects.filter(data_in__gte=last_week)
-    categories = set(posts.values_list("category__category", flat=True))
-    subscribers = set(Category.objects.filter(category__in=categories).values_list("subscriber__email", flat=True))
-    html_content = render_to_string(
-        'daily_post.html',
-        {
-            'link': settings.SITE_URL,
-            'posts': posts,
-        }
-    )
-
-    msg = EmailMultiAlternatives(
-        subject='Статьи за неделю',
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers
-    )
-
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
+# def my_job():
+#     today = datetime.datetime.now()
+#     last_week = today - datetime.timedelta(days=7)
+#     posts = Post.objects.filter(data_in__gte=last_week)
+#     categories = set(posts.values_list("category__category", flat=True))
+#     subscribers = set(Category.objects.filter(category__in=categories).values_list("subscriber__email", flat=True))
+#     html_content = render_to_string(
+#         'daily_post.html',
+#         {
+#             'link': settings.SITE_URL,
+#             'posts': posts,
+#         }
+#     )
+#
+#     msg = EmailMultiAlternatives(
+#         subject='Статьи за неделю',
+#         body='',
+#         from_email=settings.DEFAULT_FROM_EMAIL,
+#         to=subscribers
+#     )
+#
+#     msg.attach_alternative(html_content, 'text/html')
+#     msg.send()
 
 # функция, которая будет удалять неактуальные задачи
 def delete_old_job_executions(max_age=604_800):
@@ -55,15 +55,15 @@ class Command(BaseCommand):
         scheduler.add_jobstore(DjangoJobStore(), "default")
 
         # добавляем работу нашему задачнику
-        scheduler.add_job(
-            my_job,
-            trigger=CronTrigger(day_of_week="mon", hour="20", minute="29"),
-            # То же, что и интервал, но задача тригера таким образом более понятна django
-            id="my_job",  # уникальный айди
-            max_instances=1,
-            replace_existing=True,
-        )
-        logger.info("Added job 'my_job'.")
+        # scheduler.add_job(
+        #     my_job,
+        #     trigger=CronTrigger(day_of_week="mon", hour="20", minute="29"),
+        #     # То же, что и интервал, но задача тригера таким образом более понятна django
+        #     id="my_job",  # уникальный айди
+        #     max_instances=1,
+        #     replace_existing=True,
+        # )
+        # logger.info("Added job 'my_job'.")
 
         scheduler.add_job(
             delete_old_job_executions,

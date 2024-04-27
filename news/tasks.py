@@ -25,8 +25,8 @@ def printer(N):
 #ниже отправка статей за неделю. Сперва нужно закомментировать отравку такую же в runapschedular, чтоб не дублировалось
 @shared_task
 def sending_posts_past_week():
-    today = datetime.datetime.now()
-    last_week = today - datetime.timedelta(days=7)
+    today = datetime.now()
+    last_week = today - timedelta(days=7)
     posts = Post.objects.filter(data_in__gte=last_week)
     categories = set(posts.values_list("category__category", flat=True))
     subscribers = set(Category.objects.filter(category__in=categories).values_list("subscriber__email", flat=True))

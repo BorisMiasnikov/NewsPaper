@@ -8,12 +8,14 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.core.cache import cache
 
 from .filters import PostFilter
 from .models import Post, Category
 from .forms import PostForm
 
 from .tasks import hello, printer, notification_new_post
+
 
 
 class PostsList(ListView):
@@ -53,7 +55,14 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
-
+    #добавляем кеширование страницы с новостью
+    def get_object(self, *args, **kwargs):# переопределяем метод получения объекта, как ни странно
+        obj = cache.get(f'post-{self.kwargs["pk"]}, None')# кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('news.add_post',)
@@ -70,7 +79,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         if post_limit >=3:
             return render(self.request, template_name='post_limit.html', context={'author': post.author})
         post.save()
-        notification_new_post.apply_async([post.pk]) #добавил отправку сообщения о создании, передал первичнй ключ
+        # notification_new_post.apply_async([post.pk]) #добавил отправку сообщения о создании, передал первичнй ключ
         return super().form_valid(form)
 
 

@@ -3,7 +3,7 @@
 
 {% load censor_filters %}
 
-<!-- Название у нас будет products -->
+<!-- Название страницы -->
 {% block title %}
 Posts
 {% endblock title %}
@@ -16,10 +16,13 @@ Posts
     {% if posts %}
         <table>
             <tr>
-                <td>Заголовок</td>
-                <td>Дата публикации</td>
-                <td>Тeкст</td>
-                <td>Категория</td>
+                {% load cache %} <!-- Загружаем кэширование -->
+                    {% cache 500 try_stady %}
+                        <td>Заголовок</td>
+                        <td>Дата публикации</td>
+                        <td>Тeкст</td>
+                        <td>Категория</td>
+                    {% endcache %}
             </tr>
             {% for post in posts %}
             <tr>

@@ -8,7 +8,8 @@ from .views import PostsList, PostDetail, PostsSearch, NewsCreate, PostUpdate, P
 
 urlpatterns = [
     path('', cache_page(60)(PostsList.as_view()), name= 'Posts_list'),
-    path('<int:pk>/', cache_page(300)(PostDetail.as_view()), name= 'Post_detail'),
+    # path('<int:pk>/', cache_page(300)(PostDetail.as_view()), name= 'Post_detail'),
+    path('<int:pk>/', PostDetail.as_view(), name='Post_detail'),
     path('search/', PostsSearch.as_view(), name= 'Posts_search'),
     path('news/create/', cache_page(1000)(NewsCreate.as_view()), name='News_create'),
     path('news/<int:pk>/edit/', PostUpdate.as_view(), name='News_edit'),

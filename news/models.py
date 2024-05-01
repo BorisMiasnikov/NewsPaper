@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -69,8 +70,12 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.title.title()}: {self.preview()}'
 
-    def get_absolute_url(self):
+    def get_absolute_url(self):#это абсолютный путь, что бы после зоздания перебрасывало на страницу с товаром
         return reverse('Post_detail', args= [str(self.id)])
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'post-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
 
 
 class PostCategory(models.Model):

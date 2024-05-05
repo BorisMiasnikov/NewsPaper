@@ -10,8 +10,8 @@ Posts
 
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-    <h1>Все посты</h1>
-    <h1>{{ posts|length }}</h1>
+    <h1 style="text-align: left;">Всего постов {{ page_obj.paginator.count }}</h1>
+    <h4 style="text-align: right;"><span style="color: #ff0000;"><em>Из них {{ posts|length }} на этой странице</em></span></h4>
     <hr>
     {% if posts %}
         <table>

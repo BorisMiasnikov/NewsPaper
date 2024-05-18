@@ -70,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -212,7 +213,7 @@ LOGGING = {
     'formatters': {#форматоры - потом эти имена указываем в обработчиках
         'simple': {
             'format': '%(asctime)s %(levelname)s %(message)s', #определяется формат записи сообщений
-            'datefmt': '%d.%m/%Y %H-%M-%' #определяется формат даты и времени
+            'datefmt': '%d.%m/%Y %H-%M-%S' #определяется формат даты и времени
         },
         'simple_warning': {#формат сообщений для сообщений уровня warning и выше
             'format': "%(asctime)s %(levelname)s %(message)s %(exc_info)s"#с добавлением стека ошибки exc_info
@@ -222,19 +223,19 @@ LOGGING = {
         },
         'general': {#формат сообщений которые будут записываться в файл general.log
             'format': '%(asctime)s %(levelname)s %(module)s %(message)s',#добавлен модуль, который вызвывает сообщение %(module)s
-            'datefmt': '%d.%m/%Y %H-%M-%'
+            'datefmt': '%d.%m/%Y %H-%M-%S'
         },
         'errors': {#В файл errors.log должны выводиться сообщения только уровня ERROR и CRITICAL,  но я не понимаю как
             'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s %(exc_info)s',
-            'datefmt': '%d.%m/%Y %H-%M-%'
+            'datefmt': '%d.%m/%Y %H-%M-%S'
         },
         'email': {# те сообщения, которые должны отправляться на почту
             'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s',
-            'datefmt': '%d.%m/%Y %H-%M-%'
+            'datefmt': '%d.%m/%Y %H-%M-%S'
         },
         'security': {
             'format': '%(asctime)s %(levelname)s %(module)s %(message)s',
-            'datefmt': '%d.%m/%Y %H-%M-%'
+            'datefmt': '%d.%m/%Y %H-%M-%S'
         },
     },
 
@@ -321,3 +322,6 @@ LOGGING = {
     }
 }
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]

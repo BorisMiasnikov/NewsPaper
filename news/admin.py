@@ -8,13 +8,13 @@ def nullfy_rating(modeladmin, request, queryset):#функция обнулен�
 
 class PostAdmin(admin.ModelAdmin):# создаём новый класс для представления товаров в админке
     # list_display — это список или кортеж со всеми полями, которые вы хотите видеть в таблице с товарами
-    list_display = ['title', 'data_in', 'rating', 'author', 'category' ]
+    list_display = ['title', 'data_in', 'rating', 'author', 'categories' ]
     list_filter = ('author', 'data_in', 'category')#добавляем примитивные фильтры
     search_fields = ('title', 'category__category' )
     actions = [nullfy_rating]
 
-    def category(self, obj):
-        return ", ".join(cat.category for cat in obj.PostCategory.all())
+    def categories(self, obj):
+        return ", ".join(cat.category for cat in obj.category.all())
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Author)

@@ -13,6 +13,11 @@ import os
 from pathlib import Path
 from  dotenv import load_dotenv, find_dotenv
 
+import logging
+
+logger = logging.getLogger('django')
+
+
 load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +35,6 @@ SITE_URL = 'http://127.0.0.1:8000'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -106,6 +110,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     },
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -190,4 +204,120 @@ CACHES = {
     }
 }
 
+#логирование по заданию D16.4
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style' : '{',
+    'formatters': {#форматоры - потом эти имена указываем в обработчиках
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s', #определяется формат записи сообщений
+            'datefmt': '%d.%m/%Y %H-%M-%' #определяется формат даты и времени
+        },
+        'simple_warning': {#формат сообщений для сообщений уровня warning и выше
+            'format': "%(asctime)s %(levelname)s %(message)s %(exc_info)s"#с добавлением стека ошибки exc_info
+        },
+        'simple_error': {#формат сообщений для уровней ERROR и CRITICAL как я понял
+            'format': "%(asctime)s %(levelname)s %(message)s %(exc_info)s",
+        },
+        'general': {#формат сообщений которые будут записываться в файл general.log
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s',#добавлен модуль, который вызвывает сообщение %(module)s
+            'datefmt': '%d.%m/%Y %H-%M-%'
+        },
+        'errors': {#В файл errors.log должны выводиться сообщения только уровня ERROR и CRITICAL,  но я не понимаю как
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s %(exc_info)s',
+            'datefmt': '%d.%m/%Y %H-%M-%'
+        },
+        'email': {# те сообщения, которые должны отправляться на почту
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s',
+            'datefmt': '%d.%m/%Y %H-%M-%'
+        },
+        'security': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s',
+            'datefmt': '%d.%m/%Y %H-%M-%'
+        },
+    },
+
+    'filters': {# фильтры которые пропускают записи в зависимости от тру или фолс
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    #дальше определяем обработчики
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple_warning'
+        },
+        'console_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple_error'
+        },
+        'general': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': 'logs/general.log',
+            'formatter': 'general'
+        },
+        'errors': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': 'logs/errors.log',
+            'formatter': 'errors'
+        },
+        'security': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': 'logs/security.log',
+            'formatter': 'security'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'email'
+        }
+    },
+    'loggers': {#определяем регистраторы
+        'django': {
+            'handlers': ['console', 'console_warning', 'console_error', 'general'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['errors', 'mail_admins'],
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['errors', 'mail_admins'],
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'propagate': True,
+        },
+        'django.db_backends': {
+            'handlers': ['errors'],
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'propagate': True,
+        }
+    }
+}
 

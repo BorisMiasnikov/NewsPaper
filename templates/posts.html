@@ -25,15 +25,15 @@ Posts
                     {% endcache %}
             </tr>
             {% for post in posts %}
-            <tr>
-                <td>{{ post.title|censeroid }}</td>
-                <td>{{ post.data_in|date:'d M Y' }}</td>
-                <td>{{ post.text|truncatewords:20|censeroid}}</td>
-                <td>{% for category in post.category.all %}
-                    <a href="{% url 'Category_list' category.id %}">{{ category }}</a>
-                    {% endfor %}
-                </td>
-            </tr>
+                <tr class="{% cycle 'row1' 'row2' %}">
+                    <td>{{ post.title|censeroid }}</td>
+                    <td>{{ post.data_in|date:'d M Y' }}</td>
+                    <td>{{ post.text|truncatewords:20|censeroid}}</td>
+                    <td>{% for category in post.category.all %}
+                        <a href="{% url 'Category_list' category.id %}">{{ category }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
             {% endfor %}
         </table>
     {% else %}

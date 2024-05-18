@@ -2,6 +2,8 @@ from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy # импортируем «ленивый» геттекст с подсказкой
 
 
 
@@ -34,7 +36,7 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    category = models.TextField(unique=True)
+    category = models.TextField(unique=True, help_text=_('Имя категории!')) #добавил хелп текст, что бы проверить перевод
     subscriber = models.ManyToManyField(User, blank= True, null=True, related_name="categories")
 
     def __str__(self):

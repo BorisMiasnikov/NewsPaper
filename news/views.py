@@ -16,6 +16,7 @@ from .forms import PostForm
 
 from .tasks import hello, printer, notification_new_post
 
+from django.utils.translation import gettext as _
 
 
 class PostsList(ListView):
@@ -131,6 +132,7 @@ class CategoriesPostList(PostsList):
         context = super().get_context_data(**kwargs)
         context['is_not_subscribers'] = self.request.user not in self.category.subscriber.all()
         context['category'] = self.category
+        context['subscribe'] = _('Подписаться')#создали эту переменную, что б перевести ее через gettext() _() на en и она вставляется в html в виде {{ subscribe }}
         return context
 
 

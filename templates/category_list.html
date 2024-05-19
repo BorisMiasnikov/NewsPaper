@@ -11,7 +11,7 @@ Category Posts
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
     {% if is_not_subscribers %}
-        <p class="text-cetner"><a href="{% url 'Subscribe' category.id %}" class="btn btn-secondary btm-sm">Подписаться</a></p>
+        <p class="text-cetner"><a href="{% url 'Subscribe' category.id %}" class="btn btn-secondary btm-sm">{{ subscribe }}</a></p> <!-- добавил переменную субскрайб, чтобы она выводилась из представления, потому что там перевод ее -->
     {% endif %}
     <h1>Все посты</h1>
     <h1>{{ category_news_list|length }}</h1>

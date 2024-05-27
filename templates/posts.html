@@ -17,7 +17,7 @@ Posts
         <table>
             <tr>
                 {% load cache %} <!-- Загружаем кэширование -->
-                    {% cache 500 try_stady %}
+                    {% cache 5 try_stady %}
                         <td>Заголовок</td>
                         <td>Дата публикации</td>
                         <td>Тeкст</td>

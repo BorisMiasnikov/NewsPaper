@@ -2,6 +2,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% load censor_filters %}
+{% load i18n %}
 
 <!-- Название у нас будет products -->
 {% block title %}
@@ -10,7 +11,8 @@ Category Posts
 
 <!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-    {% if is_not_subscribers %}
+    {% if is_not_subscribers %} <!-- ниже эксперементирую с переводом, 1 это перевод в шаблоне, 2 это в передставлении -->
+        <p class="text-cetner"><a href="{% url 'Subscribe' category.id %}" class="btn btn-secondary btm-sm">{% trans "Subscribe" %}</a></p> <!-- добавил переменную субскрайб, чтобы она выводилась из представления, потому что там перевод ее -->
         <p class="text-cetner"><a href="{% url 'Subscribe' category.id %}" class="btn btn-secondary btm-sm">{{ subscribe }}</a></p> <!-- добавил переменную субскрайб, чтобы она выводилась из представления, потому что там перевод ее -->
     {% endif %}
     <h1>Все посты</h1>

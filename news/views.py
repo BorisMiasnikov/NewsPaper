@@ -100,7 +100,7 @@ class ArticlesCreate(PermissionRequiredMixin, CreateView):
         if post_limit >=3:
             return render(self.request, template_name='post_limit.html', context={'author': post.author})
         post.save()
-        notification_new_post.apply_async([post.pk]) #добавил отправку сообщения о создании, передал первичнй ключ
+        # notification_new_post.apply_async([post.pk]) #добавил отправку сообщения о создании, передал первичнй ключ
         return super().form_valid(form)
 
 

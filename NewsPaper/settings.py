@@ -39,6 +39,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation', #перевод моделей, обязательно вписывать перед админом
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

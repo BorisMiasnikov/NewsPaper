@@ -11,6 +11,8 @@
         </title>
         {% load static %}
         {% load i18n %}
+        {% load tz %}        <!-- загружаем тег для работы с часовыми поясами-->
+
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     </head>
     <body>
@@ -59,6 +61,20 @@
                         </select>
                         <input type="submit" value="set">
                     </form>
+                    {% get_current_timezone as TIME_ZONE %}
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <label for="timezone">Time zone:</label>
+                            <select name="timezone">
+                                {% for tz in timezones %}
+                                <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected{% endif %}>{{ tz }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" value="Set">
+                        </form>
+
+                        {{ TIME_ZONE }}
+                        {{ current_time|timezone:TIME_ZONE }} <!-- Отображаем время в выбранном часовом поясе  -->
                 </div>
             </div>
         </nav>

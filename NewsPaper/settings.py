@@ -15,6 +15,8 @@ from  dotenv import load_dotenv, find_dotenv
 
 import logging
 
+import news.middlewares
+
 logger = logging.getLogger('django')
 
 
@@ -72,6 +74,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'news.middlewares.TimezoneMiddlware', # добавил мидлвэр с таймзоной
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'

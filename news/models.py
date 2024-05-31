@@ -37,7 +37,7 @@ class Author(models.Model):
 
 class Category(models.Model):
     category = models.TextField(unique=True, help_text=_('Category!')) #добавил хелп текст, что бы проверить перевод в админ панели
-    subscriber = models.ManyToManyField(User, blank= True, null=True, related_name="categories")
+    subscriber = models.ManyToManyField(User, related_name="categories")
 
     def __str__(self):
         return f'{self.category.title()}'

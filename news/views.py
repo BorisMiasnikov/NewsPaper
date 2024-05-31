@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
@@ -18,6 +18,8 @@ from .tasks import hello, printer, notification_new_post
 
 from django.utils.translation import gettext as _
 
+import pytz #импортируем стандартный модуль для работы с поясами часовыми
+
 
 class PostsList(ListView):
     model = Post
@@ -25,13 +27,19 @@ class PostsList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 10
+    current_time = timezone.now() #записываем временную зону на этот момент сеанса
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_authors'] = not self.request.user.groups.filter(name = 'authors').exists()
+        context['current_time'] = timezone.now() #передаем в контекс текущее время
+        context['timezones'] = pytz.common_timezones # добавляем в контекст все доступные временные пояса
         return context
 
-
+        def post(self, request):
+            request.session['django_timezone'] = request.POST['timezone']
+            return redirect('/')
 
 class PostsSearch(ListView):
     model = Post
@@ -145,7 +153,7 @@ def subscribe(request, pk):
     massage = 'Это успешная подписка на'
     return render(request, 'subscriber.html', {'category':category, 'massage':massage})
 
-# это пример из модуля реализация apply_async
+# это пример из модуля реализация apply_async, не обязательный, но нельзя комментировать, иначе проект не запустить
 class IndexView(View):
     def get(self, request):
         printer.apply_async([10], eta = timezone.now() + timedelta(seconds=5)) #это метод apply_async(args[, kwargs[, ...]])

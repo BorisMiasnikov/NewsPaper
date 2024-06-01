@@ -27,19 +27,29 @@ class PostsList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 10
-    current_time = timezone.now() #записываем временную зону на этот момент сеанса
+
 
 
     def get_context_data(self, **kwargs):
+        common_timezones = {
+            "London": "Europe/London",
+            "Paris": "Europe/Paris",
+            "New York": "America/New_york",
+            "Moscow": "Europe/Moscow",
+        }
         context = super().get_context_data(**kwargs)
         context['is_not_authors'] = not self.request.user.groups.filter(name = 'authors').exists()
         context['current_time'] = timezone.now() #передаем в контекс текущее время
-        context['timezones'] = pytz.common_timezones # добавляем в контекст все доступные временные пояса
+        context['timezones'] = common_timezones # добавляем в контекст все доступные временные пояса
+
+        # context['timezones'] = pytz.common_timezones # добавляем в контекст все доступные временные пояса
+        # print(context)
         return context
 
         def post(self, request):
             request.session['django_timezone'] = request.POST['timezone']
-            return redirect('/')
+            return redirect('Posts_list') # это означает что мы после выполнения запроса, а смена часового пояса это запрос
+        #который отправляется на сервер и обновляет страницу, перенаправимся на страницу из urls по name = 'Posts_list'
 
 class PostsSearch(ListView):
     model = Post

@@ -20,7 +20,8 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">Start Bootstrap</a>
-                <a class="navbar-brand" href="#">Вы вошли как {{ user.username }}</a>
+                <!--<a class="navbar-brand" href="#">Вы вошли как {{ user.username }}</a>
+                <p><span style="color: #ffffff;">Вы вошли как {{ user.username }}</span></p>-->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -72,13 +73,13 @@
                             </select>
                             <input type="submit" value="Set">
                         </form>
-
-                        {{ TIME_ZONE }}
-                        {{ current_time|timezone:TIME_ZONE }} <!-- Отображаем время в выбранном часовом поясе  -->
                 </div>
             </div>
         </nav>
         <!-- Page content-->
+        {{ TIME_ZONE }}
+        {{ current_time|timezone:TIME_ZONE }}
+        <p style="text-align: center;"><span style="color: #808080; background-color: #ccffff;">Вы вошли как <span style="text-decoration: underline;">{{ user.username }}</span>&nbsp;</span></p>
         <div class="container">
             <div class="text-center mt-5">
                 {% block content %}

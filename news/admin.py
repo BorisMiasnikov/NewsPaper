@@ -8,12 +8,14 @@ def nullfy_rating(modeladmin, request, queryset):#функция обнулен�
     queryset.update(rating=0)
     nullfy_rating.short_description = 'Обнулить рейтинг'  # описание для более понятного представления в админ панеле задаётся, как будто это объект
 
-class PostAdmin(admin.ModelAdmin):# создаём новый класс для представления товаров в админке
+class PostAdmin( TranslationAdmin):# создаём новый класс для представления товаров в админке
     # list_display — это список или кортеж со всеми полями, которые вы хотите видеть в таблице с товарами
     list_display = ['title', 'data_in', 'rating', 'author', 'categories' ]
     list_filter = ('author', 'data_in', 'category')#добавляем примитивные фильтры
     search_fields = ('title', 'category__category' )
     actions = [nullfy_rating]
+    #из модуля про перевод модели добавляем model
+    model = Post
 
 
     def categories(self, obj):
@@ -23,12 +25,13 @@ class PostAdmin(admin.ModelAdmin):# создаём новый класс для 
 class TransCategoryAdmin(TranslationAdmin):
     model = Category
 
-class TransPostAdmin(PostAdmin, TranslationAdmin):
-    model = Post
+# class TransPostAdmin(TranslationAdmin):
+#     model = Post
 
 
 
-admin.site.register(Post, TransPostAdmin)#регистрация транспостадмин включает в себя пост админ
+# admin.site.register(Post, TransPostAdmin)
+admin.site.register(Post, PostAdmin)
 admin.site.register(Author)
 admin.site.register(Category, TransCategoryAdmin)
 admin.site.register(Comment)

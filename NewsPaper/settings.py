@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-k7&_7btc%oz9rdk#daa$q%5a=0p69ogi8fvlo=oa_r0d6(_62*'
 SITE_URL = 'http://127.0.0.1:8000'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -62,6 +62,9 @@ INSTALLED_APPS = [
     'sign',
 
     'django_apscheduler',
+
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -74,7 +77,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'news.middlewares.TimezoneMiddlware', # добавил мидлвэр с таймзоной
+    'news.middlewares.TimezoneMiddleware', # добавил мидлвэр с таймзоной
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -336,3 +339,10 @@ LOGGING = {
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale')
 ]
+
+
+REST_FRAMEWORK = {
+   'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+   'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+   'PAGE_SIZE': 10
+}

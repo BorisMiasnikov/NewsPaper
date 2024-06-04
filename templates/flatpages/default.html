@@ -11,15 +11,18 @@
         </title>
         {% load static %}
         {% load i18n %}
-        {% load tz %}        <!-- загружаем тег для работы с часовыми поясами-->
 
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <style>
+            body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} darkcyan {% else %} powderblue {% endif %};}
+        </style>
     </head>
     <body>
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <!-- убрал пользователя из шапки, а то был как ссылка. Можно сслыку использовать как личный кабинет-->
                 <!--<a class="navbar-brand" href="#">Вы вошли как {{ user.username }}</a>
                 <p><span style="color: #ffffff;">Вы вошли как {{ user.username }}</span></p>-->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -62,23 +65,24 @@
                         </select>
                         <input type="submit" value="set">
                     </form>
+                    {% load tz %}
                     {% get_current_timezone as TIME_ZONE %}
-                        <form action="" method="POST">
-                            {% csrf_token %}
-                            <label for="timezone">Time zone:</label>
-                            <select name="timezone">
-                                {% for tz in timezones %}
-                                <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected{% endif %}>{{ tz }}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="submit" value="Set">
-                        </form>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <label for="timezone">ЧП:</label>
+                        <select name="timezone">
+                            {% for tz in timezones %}
+                                <option value="{{ tz|last }}"{% if tz|last == TIME_ZONE %} selected{% endif %}>{{ tz|first }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Set">
+                    </form>
                 </div>
             </div>
         </nav>
         <!-- Page content-->
         {{ TIME_ZONE }}
-        {{ current_time|timezone:TIME_ZONE }}
+        {{ current_time|timezone:TIME_ZONE|date:"l d N Y H:i" }}
         <p style="text-align: center;"><span style="color: #808080; background-color: #ccffff;">Вы вошли как <span style="text-decoration: underline;">{{ user.username }}</span>&nbsp;</span></p>
         <div class="container">
             <div class="text-center mt-5">

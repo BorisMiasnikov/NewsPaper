@@ -17,6 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework import routers
+from news import viewsets
+
+router = routers.DefaultRouter()
+router.register(r'post', viewsets.PostViewset)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
@@ -25,4 +32,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('i18n/', include('django.conf.urls.i18n')), # подключаем встроенные эндопинты для работы с локализацией
     # path('appointments/', include(('appointment.urls', 'appointments'), namespace='appointments')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
 ]

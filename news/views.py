@@ -31,19 +31,21 @@ class PostsList(ListView):
 
 
     def get_context_data(self, **kwargs):
-        # common_timezones = {
-        #     "London": "Europe/London",
-        #     "Paris": "Europe/Paris",
-        #     "New York": "America/New_york",
-        #     "Moscow": "Europe/Moscow",
-        # }
+        common_timezones = {
+            "London": "Europe/London",
+            "Paris": "Europe/Paris",
+            "New York": "America/New_york",
+            "Moscow": "Europe/Moscow",
+            "Singapore": "Asia/Singapore",
+        }
         context = super().get_context_data(**kwargs)
         context['is_not_authors'] = not self.request.user.groups.filter(name = 'authors').exists()
-        context['current_time'] = timezone.now() #передаем в контекс текущее время
-        # context['timezones'] = common_timezones # добавляем в контекст все доступные временные пояса
-
-        context['timezones'] = pytz.common_timezones # добавляем в контекст все доступные временные пояса
-        # print(context)
+        #timezone.now().hour всегда возвращает час по UTC, а нам нужен час в соответствии с выбранным часовым поясом.
+        context['current_time'] = timezone.localtime(timezone.now()) #передаем в контекс текущее время
+        context['timezones'] = common_timezones.items() # добавляем в контекст все доступные временные пояса, которые мы добавили
+        # преобразовывая словарь в список кортежей [(ключ,значение), (...) ,]
+        # context['timezones'] = pytz.common_timezones # добавляем в контекст все доступные временные пояса в джанго
+        print(context['current_time'])
         return context
 
     def post(self, request):

@@ -21,7 +21,12 @@ from rest_framework import routers
 from news import viewsets
 
 router = routers.DefaultRouter()
-router.register(r'post', viewsets.PostViewset)
+router.register(r'posts', viewsets.PostViewset)
+router.register(r'users', viewsets.UserViewset)
+router.register(r'authors', viewsets.AuthorViewset)
+router.register(r'categories', viewsets.CategoryViewset)
+router.register(r'news', viewsets.NewsViewset)
+router.register(r'article', viewsets.ArticleViewset)
 
 
 urlpatterns = [
@@ -32,6 +37,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('i18n/', include('django.conf.urls.i18n')), # подключаем встроенные эндопинты для работы с локализацией
     # path('appointments/', include(('appointment.urls', 'appointments'), namespace='appointments')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),#  этим подклучается авторизация для DRF
+    path('api/', include(router.urls)),
 ]

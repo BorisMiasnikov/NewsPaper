@@ -21,12 +21,12 @@ from rest_framework import routers
 from news import viewsets
 
 router = routers.DefaultRouter()
-router.register(r'posts', viewsets.PostViewset)
+router.register(r'posts', viewsets.PostViewset, basename= 'posts')
 router.register(r'users', viewsets.UserViewset)
 router.register(r'authors', viewsets.AuthorViewset)
 router.register(r'categories', viewsets.CategoryViewset)
-router.register(r'news', viewsets.NewsViewset)
-router.register(r'article', viewsets.ArticleViewset)
+router.register(r'news', viewsets.NewsViewset, basename= 'news')
+router.register(r'article', viewsets.ArticleViewset, basename= 'article')
 
 
 urlpatterns = [

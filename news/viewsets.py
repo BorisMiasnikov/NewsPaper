@@ -32,3 +32,8 @@ class NewsViewset(viewsets.ModelViewSet):
 class ArticleViewset(viewsets.ModelViewSet):
     queryset = Post.objects.filter(choice_field = 'A')
     serializer_class = ArticleSerializer
+
+
+class PostCategoryViewset(viewsets.ModelViewSet):
+    queryset = PostCategory.objects.all()
+    serializer_class = PostCategorySerializer

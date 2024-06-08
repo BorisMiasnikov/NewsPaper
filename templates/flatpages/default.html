@@ -83,7 +83,11 @@
         <!-- Page content-->
         {{ TIME_ZONE }}
         {{ current_time|timezone:TIME_ZONE|date:"l d N Y H:i" }}
-        <p style="text-align: center;"><span style="color: #808080; background-color: #ccffff;">Вы вошли как <span style="text-decoration: underline;">{{ user.username }}</span>&nbsp;</span></p>
+        {% if not user.is_authenticated %}
+            <p style="text-align: center;"><span style="color: #808080; background-color: #ccffff;">Вы еще не авторизовались </span></p>
+        {% else %}
+            <p style="text-align: center;"><span style="color: #808080; background-color: #ccffff;">Вы вошли как <span style="text-decoration: underline;">{{ user.username }}</span>&nbsp;</span></p>
+        {% endif %}
         <div class="container">
             <div class="text-center mt-5">
                 {% block content %}
